@@ -74,18 +74,18 @@ const InvoiceForm = () => {
     const storedBillNumber = localStorage.getItem("billNumber");
     if (storedBillNumber) {
       setBillNumber(parseInt(storedBillNumber, 10));
+    } else {
+      setBillNumber(1164); // Set initial bill number to 1164 if not found in localStorage
     }
   }, []);
 
   useEffect(() => {
-    if (billNumber !== 0) {
+    if (billNumber !== 1164) {
       localStorage.setItem("billNumber", billNumber.toString());
     }
   }, [billNumber]);
 
-  const previewInvoice = () => {
-    window.print(); // Opens print preview without printing directly
-  };
+ 
 
   const generatePDF = () => {
     const invoiceElement = document.querySelector(
@@ -113,9 +113,12 @@ const InvoiceForm = () => {
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+  
+    return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
   }
-
   const scriptURL = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
   if (!scriptURL) {
     console.error("Google Script URL is not defined.");
@@ -520,9 +523,7 @@ const InvoiceForm = () => {
               className="pdf-buttons"
               style={{ textAlign: "center", marginTop: "10px" }}
             >
-              <button onClick={previewInvoice} className="preview-btn">
-                Print
-              </button>
+              
               <button onClick={generatePDF} className="pdf-btn">
                 Generate PDF
               </button>

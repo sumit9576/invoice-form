@@ -359,3 +359,76 @@ button {
         min-width: 600px; /* Prevents the table from shrinking too much */
     }
 }
+@media print {
+    /* Set A4 page size and reduce margins for better space utilization */
+    @page {
+        size: A4 portrait;
+        margin: 5mm;
+    }
+
+    body {
+        font-size: 14px; /* Increase font size slightly */
+    }
+
+    .container {
+        width: 100%;
+        padding: 5px;
+        box-sizing: border-box;
+    }
+    /* Hide Invoice Form and Date */
+    .invoice-form, 
+    .invoice-date {
+        display: none !important;
+    }
+
+    /* Adjust table styles for full-page fit */
+    table {
+        width: 100%;
+        table-layout: auto;
+        page-break-inside: avoid;
+    }
+
+    /* Adjust table styles */
+    table {
+        width: 100%;
+        table-layout: auto; /* Let the table expand */
+        page-break-inside: avoid;
+    }
+
+    th, td {
+        padding: 6px;
+        font-size: 12px;
+    }
+
+    .header {
+        padding: 5px;
+        margin-bottom: 10px;
+    }
+
+    .footer {
+        margin-top: 10px;
+        font-size: 12px;
+    }
+
+    /* Expand the invoice content */
+    .invoice-table {
+        min-width: 100%;
+    }
+
+    /* Hide non-print elements */
+    .payment-section,
+    .add-btn,
+    .delete-btn,
+    .submit-btn,
+    .resetbill {
+        display: none;
+    }
+
+    /* Ensure the invoice table fills more of the page */
+    .invoice-table th, 
+    .invoice-table td {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        text-overflow: ellipsis;
+    }
+}
