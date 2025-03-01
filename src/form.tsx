@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
-const InvoiceForm = () => {
+const  InvoiceForm = () => {
   const [rows, setRows] = useState([
     { description: "", quantity: 0, unitPrice: 0, amount: 0 },
   ]);
@@ -26,6 +26,7 @@ const InvoiceForm = () => {
   const [loading, setLoading] = useState(false); // Loading state for managing the loader
   const [contact, setContact] = useState("");
   const [additionalInfo, setAdditionalInfo] = useState(""); // State to store textbox value
+ 
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const formElements = Array.from(
@@ -50,7 +51,6 @@ const InvoiceForm = () => {
     if (event.key === "ArrowRight") {
       event.preventDefault();
       if (formElements[currentIndex + 1]) {
-        // Fix: Move forward instead of backward
         formElements[currentIndex + 1].focus();
       }
     }
@@ -85,12 +85,12 @@ const InvoiceForm = () => {
     }
   }, [billNumber]);
 
- 
-
+  
   const generatePDF = () => {
     const invoiceElement = document.querySelector(
       ".container"
     ) as HTMLElement | null;
+    
 
     if (!invoiceElement) {
       console.error("Error: Invoice container not found.");
@@ -107,7 +107,7 @@ const InvoiceForm = () => {
       pdf.save(`Invoice_${new Date().toISOString().slice(0, 10)}.pdf`);
     });
   };
-
+  
   function getCurrentDate() {
     const date = new Date();
     const day = String(date.getDate()).padStart(2, "0");
@@ -116,13 +116,8 @@ const InvoiceForm = () => {
     const hours = String(date.getHours()).padStart(2, "0");
     const minutes = String(date.getMinutes()).padStart(2, "0");
     const seconds = String(date.getSeconds()).padStart(2, "0");
-  
+
     return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-  }
-  const scriptURL = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
-  if (!scriptURL) {
-    console.error("Google Script URL is not defined.");
-    return;
   }
 
   const handleCustomerChange = (e: any) => {
@@ -206,13 +201,19 @@ const InvoiceForm = () => {
       form.append("payment-mode", paymentMode);
       form.append("additional-info", additionalInfo); // Append the additional info to the form
 
+      const scriptURL = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
+      if (!scriptURL) {
+        console.error("Google Script URL is not defined.");
+        return;
+      }
+
       const response = await fetch(scriptURL, {
         method: "POST",
         body: form,
       });
 
       if (response.ok) {
-        toast.success("Form submitted successfully!"); // Show success toast
+        toast.success("Form submitted successfully!", { autoClose: 1000 }); // Show success toast
         setRows([{ description: "", quantity: 0, unitPrice: 0, amount: 0 }]);
         setCustomerDetails({
           name: "",
@@ -299,16 +300,71 @@ const InvoiceForm = () => {
               onKeyDown={handleKeyDown}
               placeholder="CNr. Name:"
             />
-            <input
+            <select
               style={{ fontWeight: "bold", color: "black" }}
               className="ip"
-              type="text"
               name="address"
               value={customerDetails.address}
               onChange={handleCustomerChange}
-              onKeyDown={handleKeyDown}
-              placeholder="Address:"
-            />
+            >
+              <option value="">-- पता चुनें --</option>
+              <option value="MFP">MFP</option>
+              <option value="पटना">पटना</option>
+              <option value="काजी इंडा">काजी इंडा</option>
+              <option value="मनियारी">मनियारी</option>
+              <option value="मरिचा">मरिचा</option>
+              <option value="सोनवर्षा">सोनवर्षा</option>
+              <option value="कटहारा">कटहारा</option>
+              <option value="चेहरा कला">चेहरा कला</option>
+              <option value="महुआ">महुआ</option>
+              <option value="कुशहर">कुशहर</option>
+              <option value="सिंहहरा">सिंहहरा</option>
+              <option value="पटोरी">पटोरी</option>
+              <option value="मदुदा बाद">मदुदा बाद</option>
+              <option value="मोहड्डी नगर">मोहड्डी नगर</option>
+              <option value="महनार">महनार</option>
+              <option value="गँज">गँज</option>
+              <option value="बिद्दू पुर बाजार">बिद्दू पुर बाजार</option>
+              <option value="उमगाओ">उमगाओ</option>
+              <option value="बासोपट्टी">बासोपट्टी</option>
+              <option value="राढ़">राढ़</option>
+              <option value="मनमोहन चौक">मनमोहन चौक</option>
+              <option value="मलमल चौक">मलमल चौक</option>
+              <option value="कलुआहि">कलुआहि</option>
+              <option value="लोहा">लोहा</option>
+              <option value="रहिका">रहिका</option>
+              <option value="अरेर">अरेर</option>
+              <option value="धकझरी">धकझरी</option>
+              <option value="बेनीपट्टी">बेनीपट्टी</option>
+              <option value="बंकट्टा">बंकट्टा</option>
+              <option value="सहार घाट">सहार घाट</option>
+              <option value="बसैठा">बसैठा</option>
+              <option value="कमतौल बरैल चौक">कमतौल बरैल चौक</option>
+              <option value="खूटौना">खूटौना</option>
+              <option value="लोकहा">लोकहा</option>
+              <option value="निर्मली">निर्मली</option>
+              <option value="नरहिया">नरहिया</option>
+              <option value="घोंघरडीहा">घोंघरडीहा</option>
+              <option value="लौकही">लौकही</option>
+              <option value="सकरी">सकरी</option>
+              <option value="रामपट्टी">रामपट्टी</option>
+              <option value="पंडौल">पंडौल</option>
+              <option value="राजनगर">राजनगर</option>
+              <option value="भगवानपुर">भगवानपुर</option>
+              <option value="बाबूबरही">बाबूबरही</option>
+              <option value="भूपट्टी">भूपट्टी</option>
+              <option value="तोरियाही झंझारपुर">तोरियाही झंझारपुर</option>
+              <option value="संग्राम">संग्राम</option>
+              <option value="फुलपरास">फुलपरास</option>
+              <option value="मुरली चौक">मुरली चौक</option>
+              <option value="बेलदारी">बेलदारी</option>
+              <option value="सिसवार">सिसवार</option>
+              <option value="एकहत्था">एकहत्था</option>
+              <option value="कुशमार">कुशमार</option>
+              <option value="छरापट्टी">छरापट्टी</option>
+              <option value="खोपा">खोपा</option>
+            </select>
+
             <input
               className="ip"
               type="text"
@@ -335,16 +391,70 @@ const InvoiceForm = () => {
               onKeyDown={handleKeyDown}
               placeholder="CNe. Name:"
             />
-            <input
+            <select
               style={{ fontWeight: "bold", color: "black" }}
               className="ip"
-              type="text"
               name="caddress"
               value={customerDetails.caddress}
               onChange={handleCustomerChange}
-              onKeyDown={handleKeyDown}
-              placeholder="Address:"
-            />
+            >
+              <option value="">-- पता चुनें --</option>
+              <option value="MFP">MFP</option>
+              <option value="पटना">पटना</option>
+              <option value="काजी इंडा">काजी इंडा</option>
+              <option value="मनियारी">मनियारी</option>
+              <option value="मरिचा">मरिचा</option>
+              <option value="सोनवर्षा">सोनवर्षा</option>
+              <option value="कटहारा">कटहारा</option>
+              <option value="चेहरा कला">चेहरा कला</option>
+              <option value="महुआ">महुआ</option>
+              <option value="कुशहर">कुशहर</option>
+              <option value="सिंहहरा">सिंहहरा</option>
+              <option value="पटोरी">पटोरी</option>
+              <option value="मदुदा बाद">मदुदा बाद</option>
+              <option value="मोहड्डी नगर">मोहड्डी नगर</option>
+              <option value="महनार">महनार</option>
+              <option value="गँज">गँज</option>
+              <option value="बिद्दू पुर बाजार">बिद्दू पुर बाजार</option>
+              <option value="उमगाओ">उमगाओ</option>
+              <option value="बासोपट्टी">बासोपट्टी</option>
+              <option value="राढ़">राढ़</option>
+              <option value="मनमोहन चौक">मनमोहन चौक</option>
+              <option value="मलमल चौक">मलमल चौक</option>
+              <option value="कलुआहि">कलुआहि</option>
+              <option value="लोहा">लोहा</option>
+              <option value="रहिका">रहिका</option>
+              <option value="अरेर">अरेर</option>
+              <option value="धकझरी">धकझरी</option>
+              <option value="बेनीपट्टी">बेनीपट्टी</option>
+              <option value="बंकट्टा">बंकट्टा</option>
+              <option value="सहार घाट">सहार घाट</option>
+              <option value="बसैठा">बसैठा</option>
+              <option value="कमतौल बरैल चौक">कमतौल बरैल चौक</option>
+              <option value="खूटौना">खूटौना</option>
+              <option value="लोकहा">लोकहा</option>
+              <option value="निर्मली">निर्मली</option>
+              <option value="नरहिया">नरहिया</option>
+              <option value="घोंघरडीहा">घोंघरडीहा</option>
+              <option value="लौकही">लौकही</option>
+              <option value="सकरी">सकरी</option>
+              <option value="रामपट्टी">रामपट्टी</option>
+              <option value="पंडौल">पंडौल</option>
+              <option value="राजनगर">राजनगर</option>
+              <option value="भगवानपुर">भगवानपुर</option>
+              <option value="बाबूबरही">बाबूबरही</option>
+              <option value="भूपट्टी">भूपट्टी</option>
+              <option value="तोरियाही झंझारपुर">तोरियाही झंझारपुर</option>
+              <option value="संग्राम">संग्राम</option>
+              <option value="फुलपरास">फुलपरास</option>
+              <option value="मुरली चौक">मुरली चौक</option>
+              <option value="बेलदारी">बेलदारी</option>
+              <option value="सिसवार">सिसवार</option>
+              <option value="एकहत्था">एकहत्था</option>
+              <option value="कुशमार">कुशमार</option>
+              <option value="छरापट्टी">छरापट्टी</option>
+              <option value="खोपा">खोपा</option>
+            </select>
             <input
               className="ip"
               type="text"
@@ -523,8 +633,7 @@ const InvoiceForm = () => {
               className="pdf-buttons"
               style={{ textAlign: "center", marginTop: "10px" }}
             >
-              
-              <button onClick={generatePDF} className="pdf-btn">
+               <button onClick={generatePDF} className="pdf-btn">
                 Generate PDF
               </button>
             </div>
@@ -553,4 +662,5 @@ const InvoiceForm = () => {
     </div>
   );
 };
+
 export default InvoiceForm;

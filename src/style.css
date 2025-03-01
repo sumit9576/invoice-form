@@ -319,11 +319,12 @@ button {
     justify-content: space-between;
 }
 @media print {
-    .preview-btn,
-    .pdf-btn {
-      display: none !important;
+    .submit-btn,
+    .pdf-btn,
+    .resetbill {
+        display: none !important;
     }
-  }
+}
   .invoice-table input {
     border: none;
     outline: none;
@@ -416,7 +417,7 @@ button {
     }
 
     /* Hide non-print elements */
-    .payment-section,
+    
     .add-btn,
     .delete-btn,
     .submit-btn,
@@ -432,3 +433,30 @@ button {
         text-overflow: ellipsis;
     }
 }
+
+
+.invoice-table th:first-child,
+.invoice-table td:first-child {
+    width: 50px; /* Adjust this value as needed */
+    min-width: 50px;
+    max-width: 60px;
+    text-align: center;
+}
+
+.invoice-table th:nth-child(2),
+.invoice-table td:nth-child(2) {
+    width: 50%; /* Increase width */
+    min-width: 300px; /* Adjust for better visibility */
+    text-align: left;
+    word-wrap: break-word;
+}
+
+/* Make input inside "Particulars" column take full width */
+.invoice-table td:nth-child(2) input {
+    width: 100%; /* Ensure it expands fully */
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+
